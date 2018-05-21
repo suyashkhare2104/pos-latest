@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 import {MyNavbar} from '../components/navbar';
-import { Container, Table, Row, Col, Input, Form, Button, ButtonGroup} from 'reactstrap';
+import { Container, Table, Row, Col, Input, Button, ButtonGroup} from 'reactstrap';
 import Background from '../images/image4.jpg';
 
 var sectionStyle = {

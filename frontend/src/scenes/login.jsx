@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {MyNavbar} from '../components/navbar';
-import { Button, Form, FormGroup, Label, Input, FormText, Jumbotron, Row, Col } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Jumbotron } from 'reactstrap';
 import Background from '../images/image1.jpg';
 import AuthService from '../components/AuthService';
 
