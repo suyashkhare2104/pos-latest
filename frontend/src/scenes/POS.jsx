@@ -6,7 +6,7 @@ import Background from '../images/image3.jpg';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { Jumbotron, Container, Button, Row, Col, Table, Badge, ButtonGroup } from 'reactstrap';
-import {Checkout} from './checkout';
+
 
 let selectedItemsList = [];
 let grandTotal = 0;
@@ -24,7 +24,8 @@ export class POS extends React.Component{
     items: [],
     selectedOption: '' ,
     quantity: 0,
-    showList: false
+    showList: false,
+    initiateStateChangeForRenderToLoadAgain: 0
   }
     this.handleChange = this.handleChange.bind(this);
     this.incrementItem = this.incrementItem.bind(this);
@@ -102,7 +103,6 @@ handleDeleteItem = (index) => {
     let options = this.state.items;
     const {selectedOption} = this.state;
     let itemstable = null;
-    let checkoutprop= <Checkout items={selectedItemsList}/>;
     if(selectedItemsList.length > 0){
     itemstable = (
         <div>
@@ -183,8 +183,5 @@ handleDeleteItem = (index) => {
       </div>
     );
   }
-  componentDidMount()
-  {
-    let a= <Checkout items={selectedItemsList}/>;
-  }
+
 }

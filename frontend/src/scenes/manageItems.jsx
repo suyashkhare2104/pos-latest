@@ -18,7 +18,33 @@ export class ManageItems extends React.Component{
     this.state = {
     items: []
   }
+  this.handleChange = this.handleChange.bind(this);
+  this.handleSubmit = this.handleSubmit.bind(this);
 }
+  handleChange(e){
+    this.setState(
+      {
+          [e.target.name]: e.target.value
+      })
+    }
+  handleSubmit(e){
+      e.preventDefault();
+      this.addItem(this.state.label,this.state.value,this.state.quantity)
+    }
+  addItem(label,value,quantity){
+      axios.post('http://127.0.0.1:8000/items/', {
+        label: label,
+        value: value,
+        quantity: quantity
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
   componentWillMount() {
     axios.get(`http://127.0.0.1:8000/items/`)
       .then(res => {
@@ -63,10 +89,10 @@ export class ManageItems extends React.Component{
       <tr>
        <th>#</th>
 
-       <td><Input type="text" name="text" id="exampleText" /></td>
-       <td><Input type="text" name="text" id="exampleText" /></td>
-       <td><Input type="text" name="text" id="exampleText" /></td>
-       <td><Button>add</Button></td>
+       <td><Input type="text" name="label" onChange={this.handleChange}/></td>
+       <td><Input type="text" name="value" onChange={this.handleChange}/></td>
+       <td><Input type="text" name="quantity" onChange={this.handleChange}/></td>
+       <td><Button type="submit" onSubmit= {this.handleSubmit}>add</Button></td>
 
      </tr>
       </tbody>

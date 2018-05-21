@@ -36,7 +36,7 @@ export class Login extends React.Component{
       <Form>
        <FormGroup>
          <Label for="LoginID">Username or Email</Label>
-         <Input name="email" id="exampleEmail" placeholder="email/username" onChange={this.handleChange} />
+         <Input name="username" id="exampleEmail" placeholder="email/username" onChange={this.handleChange} />
        </FormGroup>
        <FormGroup>
          <Label for="examplePassword">Password</Label>
