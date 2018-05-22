@@ -19,7 +19,6 @@ export class ManageItems extends React.Component{
     items: []
   }
   this.handleChange = this.handleChange.bind(this);
-  this.handleSubmit = this.handleSubmit.bind(this);
 }
   handleChange(e){
     this.setState(
@@ -27,22 +26,17 @@ export class ManageItems extends React.Component{
           [e.target.name]: e.target.value
       })
     }
-  handleSubmit(e){
-      e.preventDefault();
-      this.addItem(this.state.label,this.state.value,this.state.quantity)
-    }
+
   addItem(label,value,quantity){
-      axios.post('http://127.0.0.1:8000/items/', {
-        label: label,
-        value: value,
-        quantity: quantity
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    console.log(label);
+    fetch('http://127.0.0.1:8000/items/', {
+      method: 'POST',
+      headers : 'content-type: application/json',
+      body:JSON.stringify({label:label, value:value, quantity:quantity})
+      }).then((res) => res.json())
+      .then((data) =>  console.log(data))
+      .catch((err)=>console.log(err))
+
     }
 
   componentWillMount() {
@@ -63,8 +57,8 @@ export class ManageItems extends React.Component{
 
       <Container>
       <Row>
-      <Col xs={{ size: 8, offset: 2 }}>
-      <Table dark hover size="sm" bordered responsive>
+      <Col xs={{ size: 10, offset: 1 }}>
+      <Table dark hover size="sm" borderless responsive>
        <thead>
          <tr>
            <th>#</th>
@@ -80,10 +74,9 @@ export class ManageItems extends React.Component{
         <td>{item.label}</td>
         <td>{item.value}</td>
         <td>{item.quantity}</td>
-        <td><ButtonGroup>
-        <Button>edit</Button>
-        <Button>delete</Button>
-      </ButtonGroup></td>
+        <td>
+          <Button>delete</Button>
+        </td>
       </tr>
       ))}
       <tr>
@@ -92,7 +85,7 @@ export class ManageItems extends React.Component{
        <td><Input type="text" name="label" onChange={this.handleChange}/></td>
        <td><Input type="text" name="value" onChange={this.handleChange}/></td>
        <td><Input type="text" name="quantity" onChange={this.handleChange}/></td>
-       <td><Button type="submit" onSubmit= {this.handleSubmit}>add</Button></td>
+       <td><Button onClick={() => this.addItem(this.state.label,this.state.value,this.state.quantity)}>add</Button></td>
 
      </tr>
       </tbody>

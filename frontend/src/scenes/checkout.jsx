@@ -3,7 +3,7 @@ import { Table} from 'reactstrap';
 import Background from '../images/image2.jpg';
 import { Card, Button, CardTitle, CardText, Row, Col, Badge, Container, Form, FormGroup, Label, Input} from 'reactstrap';
 import {MyNavbar} from '../components/navbar';
-var imageName = require('../images/qrCode.png')
+var QRCode = require('qrcode.react');
 
 var sectionStyle = {
   backgroundSize: 'cover',
@@ -11,65 +11,72 @@ var sectionStyle = {
   height: '750px',
   backgroundImage: `url(${Background})`
 };
+var billNumber= Math.floor(Math.random() * 10000000);
 
 export class Checkout extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      display: 0
+  constructor (props) {
+     super(props);
+     this.state= ({rSelected: 0});
+     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+   }
+   onRadioBtnClick(rSelected) {
+      this.setState({ rSelected });
     }
-    console.log(this.state.display);
-    this.handleClick = this.handleClick.bind(this);
-  }
-    handleClick(index) {
-      this.setstate = {display:index};
-    }
+
 
   render(){
     let display= null;
-    if(this.state.display = 1){
-      display = <img src={imageName} />;
+
+    if(this.state.rSelected === 1){
+      display = (
+        <div>
+        <QRCode value={billNumber} />
+        </div>
+      );
     }
-    else if(this.state.display = 2){
+    else if(this.state.rSelected === 2){
       display =(
         <Form>
         <FormGroup>
-          <Label>CID</Label>
+          <Label> <h3><Badge color="secondary">Enter CID</Badge></h3></Label>
           <Input type="text" />
         </FormGroup>
+        <Button>Submit</Button>
         </Form>
         );
     }
-    else if(this.state.display = 3){
+    else if(this.state.rSelected === 3){
       display =(
         <Form>
         <FormGroup>
-          <Label>Phone or Email</Label>
+          <Label><h3> <Badge color="secondary">Enter Phone or Email</Badge></h3></Label>
           <Input type="text" />
         </FormGroup>
+        <Button>Submit</Button>
         </Form>
         );
     }
-console.log(this.state.display);
+console.log(this.state.rSelected);
     return(
       <div style={{'text-align':'center'}}>
       <section style={ sectionStyle }>
       <MyNavbar/>
       <Container>
       <h1> <Badge color="secondary">How do you want to receive your bill? </Badge></h1>
+      <h3> <Badge color="secondary">Bill Number: {billNumber}</Badge> </h3>
       <Row>
       <Col sm="6">
        <Card body>
          <CardTitle>QR Code</CardTitle>
          <CardText>Get the bill on your phone by scanning a QR code.</CardText>
-         <Button onClick= {this.handleClick(1)}>Scan QR code</Button>
+         <Button onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>Scan QR code</Button>
        </Card>
        </Col>
         <Col sm="6">
        <Card body>
          <CardTitle>Customer ID</CardTitle>
          <CardText>Get bill on our app/SMS/email by entering CID.</CardText>
-         <Button onClick= {this.handleClick(2)}>Enter CID</Button>
+         <Button onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>Enter CID</Button>
        </Card>
        </Col>
        </Row>
@@ -79,14 +86,14 @@ console.log(this.state.display);
        <Card body>
          <CardTitle>SMS/Email</CardTitle>
          <CardText>Get bill on your phone through SMS/email.</CardText>
-         <Button onClick= {this.handleClick(3)}>Enter phone number/email</Button>
+         <Button onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>Enter phone number/email</Button>
        </Card>
        </Col>
        <Col sm="6">
        <Card body>
          <CardTitle>Get Printed bill</CardTitle>
          <CardText>WARNING: Printed bills harm you and the environment.</CardText>
-         <Button onClick= {this.handleClick(4)}>Print Bill</Button>
+         <Button>Print Bill</Button>
        </Card>
        </Col>
        </Row>

@@ -3,6 +3,7 @@ from items import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
-    path('',views.ItemList),
-    path('<pk>', views.ItemDetail),
+    path('',views.ItemList.as_view()),
+    path('<pk>', views.ItemDetail.as_view()),
 ]
+urlpatterns = format_suffix_patterns(urlpatterns)

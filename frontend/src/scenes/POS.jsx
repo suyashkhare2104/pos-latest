@@ -7,9 +7,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { Jumbotron, Container, Button, Row, Col, Table, Badge, ButtonGroup } from 'reactstrap';
 
-
-let selectedItemsList = [];
-let grandTotal = 0;
+let grandtotal= null;
 var sectionStyle = {
   backgroundSize: 'cover',
   overflow: 'hidden',
@@ -25,37 +23,41 @@ export class POS extends React.Component{
     selectedOption: '' ,
     quantity: 0,
     showList: false,
-    initiateStateChangeForRenderToLoadAgain: 0
+    selectedItemsList: [],
+    grandTotal: 0
   }
     this.handleChange = this.handleChange.bind(this);
     this.incrementItem = this.incrementItem.bind(this);
     this.decrementItem = this.decrementItem.bind(this);
 }
-    handleChange = (selectedOption) => {
+
+  handleChange = (selectedOption) => {
     this.setState({ selectedOption });
   }
+
   incrementItem = (index) => {
-  selectedItemsList[index].quantity += 1;
-  selectedItemsList[index].total = selectedItemsList[index].value * selectedItemsList[index].quantity;
-  grandTotal += selectedItemsList[index].value;
-  this.setState({initiateStateChangeForRenderToLoadAgain: grandTotal});
-  console.log(selectedItemsList);
+  this.state.selectedItemsList[index].quantity += 1;
+  this.state.selectedItemsList[index].total = this.state.selectedItemsList[index].value * this.state.selectedItemsList[index].quantity;
+  grandtotal += this.state.selectedItemsList[index].value;
+  this.setState ({ grandTotal: grandtotal });
+  console.log(this.state.selectedItemsList);
+  console.log(this.state.grandTotal);
 }
 
-decrementItem = (index) => {
-  if (selectedItemsList[index].quantity !== 0){
-    selectedItemsList[index].quantity -= 1;
-    selectedItemsList[index].total = selectedItemsList[index].value * selectedItemsList[index].quantity;
-    grandTotal -= selectedItemsList[index].value;
+  decrementItem = (index) => {
+  if (this.state.selectedItemsList[index].quantity !== 0){
+    this.state.selectedItemsList[index].quantity -= 1;
+    this.state.selectedItemsList[index].total = this.state.selectedItemsList[index].value * this.state.selectedItemsList[index].quantity;
+    grandtotal -= this.state.selectedItemsList[index].value;
+    this.setState ({ grandTotal: grandtotal });
   }
-  this.setState({initiateStateChangeForRenderToLoadAgain: grandTotal});
-  console.log(selectedItemsList);
+  console.log(this.state.selectedItemsList);
 }
 
-addToCart = () => {
+  addToCart = () => {
 
   let checkMultipleProductsCounter = 0;
-  selectedItemsList.map(product => {
+  this.state.selectedItemsList.map(product => {
     if(this.state.selectedOption.label === product.label){
        checkMultipleProductsCounter += 1;
     }
@@ -75,20 +77,19 @@ addToCart = () => {
         quantity: 0,
         total: 0},
       ];
-    selectedItemsList = selectedItemsList.concat(tempArray);
+    this.state.selectedItemsList = this.state.selectedItemsList.concat(tempArray);
     this.setState(
       {selectedOption : ''}
     );
   }
 }
 
-handleDeleteItem = (index) => {
-  const itemTotal = selectedItemsList[index].value * selectedItemsList[index].quantity ;
-  grandTotal = grandTotal - itemTotal ;
-  selectedItemsList.splice(index,1);
-  this.setState({initiateStateChangeForRenderToLoadAgain: grandTotal});
+  handleDeleteItem = (index) => {
+  const itemTotal = this.state.selectedItemsList[index].value * this.state.selectedItemsList[index].quantity ;
+  grandtotal = this.state.grandTotal - itemTotal ;
+  this.state.selectedItemsList.splice(index,1);
+  this.setState ({ grandTotal: grandtotal });
 }
-
 
   componentWillMount() {
     axios.get(`http://127.0.0.1:8000/items/`)
@@ -103,7 +104,7 @@ handleDeleteItem = (index) => {
     let options = this.state.items;
     const {selectedOption} = this.state;
     let itemstable = null;
-    if(selectedItemsList.length > 0){
+    if(this.state.selectedItemsList.length > 0){
     itemstable = (
         <div>
           <Table dark borderless responsive>
@@ -119,7 +120,7 @@ handleDeleteItem = (index) => {
               </tr>
             </thead>
             <tbody>
-              { selectedItemsList.map((product, index) => {
+              { this.state.selectedItemsList.map((product, index) => {
                 return (
                   <tr>
                     <th scope='row'>{index+1}</th>
@@ -145,8 +146,8 @@ handleDeleteItem = (index) => {
     }
     let GT = null;
     let checkout = null;
-    if(grandTotal > 0){
-      GT=  <h3> <Badge color="secondary">Total: {grandTotal} </Badge></h3>;
+    if(this.state.grandTotal > 0){
+      GT=  <h3> <Badge color="secondary">Total: {this.state.grandTotal} </Badge></h3>;
       checkout =  <Button color="success" size="md" href="/checkout" onClick={this.checkout}>Checkout</Button>;
     }
 
