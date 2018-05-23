@@ -115,7 +115,6 @@ export class POS extends React.Component{
                 <th>Rate</th>
                 <th>Quantity</th>
                 <th>Total</th>
-                <th>Change Quantity</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -126,15 +125,14 @@ export class POS extends React.Component{
                     <th scope='row'>{index+1}</th>
                     <td>{product.label}</td>
                     <td>{product.value}</td>
-                    <td>{product.quantity}</td>
-                    <td>{product.total}</td>
                     <td>
-                    <ButtonGroup>
-                    <Button onClick={() => this.incrementItem(index)}>increase</Button>
-                    <Button onClick={() => this.decrementItem(index)}>decrease</Button>
-                    </ButtonGroup>
+                    <Button onClick={() => this.incrementItem(index)}>+</Button>
+                     {'   '}{product.quantity}{'   '}
+                    <Button onClick={() => this.decrementItem(index)}>-</Button>
                     </td>
-                    <td><Button onClick= {() => this.handleDeleteItem(index)}>Delete</Button></td>
+                    <td>{product.total}</td>
+
+                    <td><Button onClick= {() => this.handleDeleteItem(index)} color="danger">X</Button></td>
                   </tr>
                 )
               })}

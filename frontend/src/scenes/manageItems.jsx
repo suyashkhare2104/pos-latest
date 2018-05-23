@@ -16,9 +16,13 @@ export class ManageItems extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-    items: []
+    items: [],
+    refresh: null
   }
   this.handleChange = this.handleChange.bind(this);
+  this.addItem = this.addItem.bind(this);
+
+
 }
   handleChange(e){
     this.setState(
@@ -28,16 +32,17 @@ export class ManageItems extends React.Component{
     }
 
   addItem(label,value,quantity){
-    console.log(label);
+
     fetch('http://127.0.0.1:8000/items/', {
       method: 'POST',
-      headers : 'content-type: application/json',
-      body:JSON.stringify({label:label, value:value, quantity:quantity})
+      headers : {'Content-Type': 'application/json'},
+      body:JSON.stringify({'label':label, 'value':value, 'quantity':quantity})
       }).then((res) => res.json())
       .then((data) =>  console.log(data))
       .catch((err)=>console.log(err))
-
-    }
+      this.state.items = this.state.items.concat([{label,value,quantity}]);
+      this.setState({ items:this.state.items });
+  }
 
   componentWillMount() {
     axios.get(`http://127.0.0.1:8000/items/`)
@@ -75,7 +80,7 @@ export class ManageItems extends React.Component{
         <td>{item.value}</td>
         <td>{item.quantity}</td>
         <td>
-          <Button>delete</Button>
+          <Button color="danger">X</Button>
         </td>
       </tr>
       ))}
@@ -85,7 +90,7 @@ export class ManageItems extends React.Component{
        <td><Input type="text" name="label" onChange={this.handleChange}/></td>
        <td><Input type="text" name="value" onChange={this.handleChange}/></td>
        <td><Input type="text" name="quantity" onChange={this.handleChange}/></td>
-       <td><Button onClick={() => this.addItem(this.state.label,this.state.value,this.state.quantity)}>add</Button></td>
+       <td><Button onClick={() => this.addItem(this.state.label,this.state.value,this.state.quantity)} color="success">add</Button></td>
 
      </tr>
       </tbody>
